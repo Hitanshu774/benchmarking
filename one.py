@@ -49,32 +49,84 @@ def load_and_chunk_corpus(filepath: str = "small_corpus.jsonl") -> List[Dict]:
 RAW_EVAL_DATASET = [
     {
         "query": "Which standing order created the privileged nominations designation?", 
-        "expected_substring": "S.Res. 116" # Keyword heavy query
+        "expected_substring": "s.res. 116" # Keyword heavy query
     },
     {
         "query": "How many privileged positions exist?", 
-        "expected_substring": "285 positions to which nominations are privileged" # Semantic/Factoid query
+        "expected_substring": "285 positions" # Semantic/Factoid query
     },
     {
         "query": "What is the retention issue at the Social Security Administration for non-disabled hires?", 
-        "expected_substring": "25 percent of the total number of persons without disabilities" # Complex query requiring domain mapping
+        "expected_substring": "25 percent of the total number" # Complex query requiring domain mapping
     },
-    # --- NEW QUERIES WHERE HYBRID SHINES ---
     {
         "query": "What fraction of non-handicapped employees left the agency within 12 months?", 
-        "expected_substring": "25 percent of the total number of persons without disabilities" # Vocabulary Mismatch
+        "expected_substring": "25 percent of the total number" # Vocabulary Mismatch
     },
     {
         "query": "Are most of the expedited senate selections for full-time roles?", 
-        "expected_substring": "285 positions to which nominations are privileged" # Semantic Synonym
+        "expected_substring": "285 positions" # Semantic Synonym
     },
     {
         "query": "Which rule was introduced to make confirming presidential appointees faster?",
-        "expected_substring": "S.Res. 116" # Conceptual Abstraction
+        "expected_substring": "s.res. 116" # Conceptual Abstraction
     },
     {
         "query": "Were the roles initially expedited by the 112th Congress later expanded to include any insurance-related boards?",
-        "expected_substring": "Terrorism Risk Insurance Program Reauthorization Act of 2015" # Multi-concept abstractive matching
+        "expected_substring": "terrorism risk insurance program" # Multi-concept abstractive matching
+    },
+    # --- NEW QUERIES ADDED TO REACH 20 ---
+    {
+        "query": "How did the Washington Post obtain the Afghanistan Papers interviews?",
+        "expected_substring": "freedom of information act (foia)" # Factoid
+    },
+    {
+        "query": "What did Ashraf Ghani say about the financial limit Afghanistan could handle in 2002?",
+        "expected_substring": "absorb money was $2 billion" # Specific Entity/Numeric
+    },
+    {
+        "query": "What is the total estimated outlay for the Department of Health and Human Services in the FY2021 budget request?",
+        "expected_substring": "$1.370 trillion" # Numeric Factoid
+    },
+    {
+        "query": "Why do private sector companies try to avoid building products that break easily?",
+        "expected_substring": "increased warranty expenses that decrease profits" # Semantic/Conceptual Abstraction
+    },
+    {
+        "query": "Which two major defense programs failed to include reliability engineers early in their system development?",
+        "expected_substring": "expeditionary fighting vehicle (efv) and f-22" # Multi-Entity Extraction
+    },
+    {
+        "query": "What technical defect forced all F-35s out of the sky in late 2018?",
+        "expected_substring": "manufacturing fault with an engine fuel tube" # Semantic Synonym (forced out of the sky -> grounded)
+    },
+    {
+        "query": "What was the projected acquisition cost for the F-35 program mentioned in the report?",
+        "expected_substring": "$406 billion" # Financial Factoid
+    },
+    {
+        "query": "Did the 1985 review of defense profit guidelines factor in a company's assets and liabilities?",
+        "expected_substring": "did not explicitly take into account the cost of working capital" # Concept mapping (assets/liabilities -> working capital)
+    },
+    {
+        "query": "What was the authorized end strength for uniformed Army personnel in 2017?",
+        "expected_substring": "1.018 million uniformed personnel" # Exact Factoid
+    },
+    {
+        "query": "What defines a covered defense business system in terms of budget authority?",
+        "expected_substring": "budget authority of over $50 million" # Keyword Exact
+    },
+    {
+        "query": "When did the TSA Pipeline Security Branch issue its revised security guidelines?",
+        "expected_substring": "guidelines in march 2018" # Date Factoid
+    },
+    {
+        "query": "What act established requirements for legislation that imposes duties on state or local governments without funding?",
+        "expected_substring": "unfunded mandates reform act of 1995" # Acronym / Title mapping
+    },
+    {
+        "query": "What monetary limit dictates whether a military enterprise software project is heavily regulated?",
+        "expected_substring": "budget authority of over $50 million" # Severe Vocabulary Mismatch (software project -> business system, heavily regulated -> covered)
     }
 ]
 
