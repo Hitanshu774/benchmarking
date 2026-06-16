@@ -3,7 +3,7 @@ import numpy as np
 import time
 from typing import List, Dict, Tuple
 from sklearn.feature_extraction.text import HashingVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.metrics.pairwise import cosine_distances
 
 # You will need to pip install these:
 # pip install scikit-learn rank_bm25 sentence-transformers numpy
@@ -21,9 +21,11 @@ def load_and_chunk_corpus(filepath: str = "small_corpus.jsonl") -> List[Dict]:
                 # Simple sentence/period splitting for chunking
                 text_splits = doc.get("text", "").split(". ")
                 
-                # Group every 3 sentences into a chunk
-                for i in range(0, len(text_splits), 3):
-                    chunk_text = ". ".join(text_splits[i:i+3]).strip()
+                # Sliding window: Group 5 sentences with an overlap of 2 to preserve context
+                window_size = 5
+                step = 3
+                for i in range(0, len(text_splits), step):
+                    chunk_text = ". ".join(text_splits[i:i+window_size]).strip()
                     if len(chunk_text) > 20: # Ignore tiny fragments
                         chunks.append({
                             "chunk_id": f"{doc['_id']}_chunk_{i}",
@@ -37,6 +39,7 @@ def load_and_chunk_corpus(filepath: str = "small_corpus.jsonl") -> List[Dict]:
             {"chunk_id": "c0_1", "text": "As part of an effort to streamline the nominations process, a standing order of the Senate, S.Res. 116, created a new designation of certain nominations as privileged."},
             {"chunk_id": "c0_2", "text": "In total, there are 285 positions to which nominations are privileged, the majority of which are part-time appointments to oversight boards."},
             {"chunk_id": "c0_3", "text": "Nearly 25 percent of the total number of persons without disabilities that were hired at SSA stayed for less than 1 year of service."},
+            {"chunk_id": "c0_4", "text": "The Terrorism Risk Insurance Program Reauthorization Act of 2015 created a new 13-member Board of Directors for the National Association of Registered Agents and Brokers and designated these positions as privileged nominations established by S.Res. 116."}
         ]
     return chunks
 
@@ -68,6 +71,10 @@ RAW_EVAL_DATASET = [
     {
         "query": "Which rule was introduced to make confirming presidential appointees faster?",
         "expected_substring": "S.Res. 116" # Conceptual Abstraction
+    },
+    {
+        "query": "Were the roles initially expedited by the 112th Congress later expanded to include any insurance-related boards?",
+        "expected_substring": "Terrorism Risk Insurance Program Reauthorization Act of 2015" # Multi-concept abstractive matching
     }
 ]
 
@@ -82,11 +89,15 @@ class HashingVectorizerRetriever:
         
     def search(self, query: str, top_k: int = 3) -> List[str]:
         query_vec = self.vectorizer.transform([query])
-        # Compute cosine similarity between query and all documents
-        similarities = cosine_similarity(query_vec, self.doc_matrix).flatten()
+        # Compute cosine distance between query and all documents
+        # We use cosine_distances because HashingVectorizer output is not guaranteed to be normalized
+        # and cosine_similarity does not normalize by default if output is not l2 normalized
+        # However, HashingVectorizer defaults to norm='l2', so cosine similarity and distance are inversely related.
+        # To avoid any ambiguity and just get the most similar we'll compute distance and sort ascending
+        distances = cosine_distances(query_vec, self.doc_matrix).flatten()
         
-        # Get top K indices
-        top_indices = similarities.argsort()[-top_k:][::-1]
+        # Get top K indices (smallest distance)
+        top_indices = distances.argsort()[:top_k]
         return [self.chunks[i]["chunk_id"] for i in top_indices]
 
 # --- 4. CHALLENGER: HYBRID RETRIEVER (BM25 + Dense + Reranker) ---
@@ -107,17 +118,17 @@ class HybridRetriever:
         self.reranker = CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2')
 
     def search(self, query: str, top_k: int = 3) -> List[str]:
-        # 1. Sparse Retrieval (Top 10)
+        # 1. Sparse Retrieval (Top 25)
         tokenized_query = query.lower().split(" ")
         bm25_scores = self.bm25.get_scores(tokenized_query)
-        top_bm25_idx = np.argsort(bm25_scores)[-10:]
+        top_bm25_idx = np.argsort(bm25_scores)[-25:]
         
-        # 2. Dense Retrieval (Top 10)
+        # 2. Dense Retrieval (Top 25)
         query_embedding = self.embedding_model.encode(query, convert_to_tensor=True)
         # We use dot product for cosine similarity with normalized embeddings
         from sentence_transformers.util import cos_sim
         dense_scores = cos_sim(query_embedding, self.doc_embeddings)[0]
-        top_dense_idx = np.argsort(dense_scores.cpu().numpy())[-10:]
+        top_dense_idx = np.argsort(dense_scores.cpu().numpy())[-25:]
         
         # 3. Combine unique candidates
         unique_candidates_idx = list(set(top_bm25_idx).union(set(top_dense_idx)))
