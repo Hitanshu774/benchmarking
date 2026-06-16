@@ -1,5 +1,6 @@
 import json
 import numpy as np
+import time
 from typing import List, Dict, Tuple
 from sklearn.feature_extraction.text import HashingVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -39,33 +40,34 @@ def load_and_chunk_corpus(filepath: str = "small_corpus.jsonl") -> List[Dict]:
         ]
     return chunks
 
-# --- 2. THE GOLDEN EVALUATION SET ---
-# A list of queries and the exact chunk_id that answers them
-EVAL_DATASET = [
+# --- 2. THE GOLDEN EVALUATION SET (DYNAMIC MAPPING) ---
+# Instead of hardcoding chunk_ids that might change based on parsing,
+# we define the exact substring that MUST be present in the expected chunk.
+RAW_EVAL_DATASET = [
     {
         "query": "Which standing order created the privileged nominations designation?", 
-        "expected_chunk_id": "c0_1" # Keyword heavy query
+        "expected_substring": "S.Res. 116" # Keyword heavy query
     },
     {
         "query": "How many privileged positions exist?", 
-        "expected_chunk_id": "c0_2" # Semantic/Factoid query
+        "expected_substring": "285 positions to which nominations are privileged" # Semantic/Factoid query
     },
     {
         "query": "What is the retention issue at the Social Security Administration for non-disabled hires?", 
-        "expected_chunk_id": "c0_3" # Complex query requiring domain mapping
+        "expected_substring": "25 percent of the total number of persons without disabilities" # Complex query requiring domain mapping
     },
     # --- NEW QUERIES WHERE HYBRID SHINES ---
     {
         "query": "What fraction of non-handicapped employees left the agency within 12 months?", 
-        "expected_chunk_id": "c0_3" # Vocabulary Mismatch (non-handicapped -> without disabilities, 12 months -> 1 year)
+        "expected_substring": "25 percent of the total number of persons without disabilities" # Vocabulary Mismatch
     },
     {
         "query": "Are most of the expedited senate selections for full-time roles?", 
-        "expected_chunk_id": "c0_2" # Semantic Synonym (expedited selections -> privileged nominations)
+        "expected_substring": "285 positions to which nominations are privileged" # Semantic Synonym
     },
     {
         "query": "Which rule was introduced to make confirming presidential appointees faster?",
-        "expected_chunk_id": "c0_1" # Conceptual Abstraction (faster -> streamline, appointees -> nominations)
+        "expected_substring": "S.Res. 116" # Conceptual Abstraction
     }
 ]
 
@@ -142,18 +144,38 @@ def calculate_metrics(retrieved_ids: List[str], expected_id: str) -> Tuple[int, 
     return hit, mrr
 
 def run_benchmark():
-    import time # Added import for latency tracking
     chunks = load_and_chunk_corpus()
     
+    print("\n--- Mapping Golden Dataset to Dynamic Chunk IDs ---")
+    eval_dataset = []
+    for item in RAW_EVAL_DATASET:
+        mapped_id = None
+        for c in chunks:
+            if item["expected_substring"].lower() in c["text"].lower():
+                mapped_id = c["chunk_id"]
+                break
+        
+        if mapped_id:
+            eval_dataset.append({
+                "query": item["query"],
+                "expected_chunk_id": mapped_id
+            })
+        else:
+            print(f"⚠️ Warning: Could not find ground truth in corpus for query: '{item['query']}'")
+
+    if not eval_dataset:
+        print("Error: No queries could be mapped to the current corpus. Exiting.")
+        return
+
     print("\n--- Initializing Retrievers ---")
     hashing_retriever = HashingVectorizerRetriever(chunks)
     hybrid_retriever = HybridRetriever(chunks)
     
     results = {"Hashing": {"hits": 0, "mrr": 0.0, "time": 0.0}, "Hybrid": {"hits": 0, "mrr": 0.0, "time": 0.0}}
-    total_queries = len(EVAL_DATASET)
+    total_queries = len(eval_dataset)
     
     print("\n--- Running Evaluation ---")
-    for i, item in enumerate(EVAL_DATASET):
+    for i, item in enumerate(eval_dataset):
         query = item["query"]
         expected = item["expected_chunk_id"]
         print(f"\nQ{i+1}: '{query}'")
