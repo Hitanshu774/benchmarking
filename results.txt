@@ -1,0 +1,124 @@
+root@a4095273b3d8:/home/benchmarking# python one.py 
+Loaded 4922 chunks from small_corpus.jsonl
+
+--- Mapping Golden Dataset to Dynamic Chunk IDs ---
+
+--- Initializing Retrievers ---
+Loading local embedding model (all-MiniLM-L6-v2)...
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 103/103 [00:00<00:00, 1163.89it/s]
+Loading sparse index (BM25)...
+Loading Reranker (ms-marco-MiniLM-L-6-v2)...
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/cross-encoder/ms-marco-MiniLM-L-6-v2/resolve/main/./modules.json
+Retrying in 1s [Retry 1/5].
+Loading weights: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 105/105 [00:00<00:00, 1186.43it/s]
+
+--- Running Evaluation ---
+
+Q1: 'Which standing order created the privileged nominations designation?'
+Target Chunk ID: c0_chunk_3
+ [Hashing] Retrieved: ['c0_chunk_102', 'c0_chunk_6', 'c0_chunk_9'] | Recall@3: 0.0 | Prec@3: 0.00 | MRR: 0.00 | NDCG@3: 0.00
+ [Hybrid]  Retrieved: ['c0_chunk_3', 'c0_chunk_6', 'c0_chunk_81'] | Recall@3: 1.0 | Prec@3: 0.33 | MRR: 1.00 | NDCG@3: 1.00
+
+Q2: 'How many privileged positions exist?'
+Target Chunk ID: c0_chunk_3
+ [Hashing] Retrieved: ['c0_chunk_102', 'c0_chunk_6', 'c0_chunk_87'] | Recall@3: 0.0 | Prec@3: 0.00 | MRR: 0.00 | NDCG@3: 0.00
+ [Hybrid]  Retrieved: ['c0_chunk_6', 'c0_chunk_87', 'c0_chunk_84'] | Recall@3: 0.0 | Prec@3: 0.00 | MRR: 0.00 | NDCG@3: 0.00
+
+Q3: 'What is the retention issue at the Social Security Administration for non-disabled hires?'
+Target Chunk ID: c142_chunk_315
+ [Hashing] Retrieved: ['c136_chunk_0', 'c142_chunk_294', 'c113_chunk_384'] | Recall@3: 0.0 | Prec@3: 0.00 | MRR: 0.00 | NDCG@3: 0.00
+ [Hybrid]  Retrieved: ['c142_chunk_318', 'c142_chunk_315', 'c142_chunk_297'] | Recall@3: 1.0 | Prec@3: 0.33 | MRR: 0.50 | NDCG@3: 0.63
+
+Q4: 'What fraction of non-handicapped employees left the agency within 12 months?'
+Target Chunk ID: c142_chunk_315
+ [Hashing] Retrieved: ['c13_chunk_15', 'c142_chunk_93', 'c13_chunk_24'] | Recall@3: 0.0 | Prec@3: 0.00 | MRR: 0.00 | NDCG@3: 0.00
+ [Hybrid]  Retrieved: ['c142_chunk_60', 'c142_chunk_102', 'c142_chunk_309'] | Recall@3: 0.0 | Prec@3: 0.00 | MRR: 0.00 | NDCG@3: 0.00
+
+Q5: 'Are most of the expedited senate selections for full-time roles?'
+Target Chunk ID: c0_chunk_3
+ [Hashing] Retrieved: ['c0_chunk_3', 'c12_chunk_189', 'c12_chunk_192'] | Recall@3: 1.0 | Prec@3: 0.33 | MRR: 1.00 | NDCG@3: 1.00
+ [Hybrid]  Retrieved: ['c0_chunk_87', 'c0_chunk_39', 'c0_chunk_90'] | Recall@3: 0.0 | Prec@3: 0.00 | MRR: 0.00 | NDCG@3: 0.00
+
+Q6: 'Which rule was introduced to make confirming presidential appointees faster?'
+Target Chunk ID: c0_chunk_3
+ [Hashing] Retrieved: ['c141_chunk_24', 'c141_chunk_27', 'c141_chunk_51'] | Recall@3: 0.0 | Prec@3: 0.00 | MRR: 0.00 | NDCG@3: 0.00
+ [Hybrid]  Retrieved: ['c0_chunk_63', 'c0_chunk_60', 'c0_chunk_72'] | Recall@3: 0.0 | Prec@3: 0.00 | MRR: 0.00 | NDCG@3: 0.00
+
+Q7: 'Were the roles initially expedited by the 112th Congress later expanded to include any insurance-related boards?'
+Target Chunk ID: c0_chunk_78
+ [Hashing] Retrieved: ['c135_chunk_216', 'c135_chunk_132', 'c12_chunk_534'] | Recall@3: 0.0 | Prec@3: 0.00 | MRR: 0.00 | NDCG@3: 0.00
+ [Hybrid]  Retrieved: ['c0_chunk_81', 'c0_chunk_78', 'c0_chunk_54'] | Recall@3: 1.0 | Prec@3: 0.33 | MRR: 0.50 | NDCG@3: 0.63
+
+Q8: 'How did the Washington Post obtain the Afghanistan Papers interviews?'
+Target Chunk ID: c1_chunk_15
+ [Hashing] Retrieved: ['c1_chunk_0', 'c1_chunk_3', 'c1_chunk_288'] | Recall@3: 0.0 | Prec@3: 0.00 | MRR: 0.00 | NDCG@3: 0.00
+ [Hybrid]  Retrieved: ['c1_chunk_0', 'c1_chunk_15', 'c1_chunk_18'] | Recall@3: 1.0 | Prec@3: 0.33 | MRR: 0.50 | NDCG@3: 0.63
+
+Q9: 'What did Ashraf Ghani say about the financial limit Afghanistan could handle in 2002?'
+Target Chunk ID: c1_chunk_33
+ [Hashing] Retrieved: ['c1_chunk_255', 'c1_chunk_252', 'c1_chunk_288'] | Recall@3: 0.0 | Prec@3: 0.00 | MRR: 0.00 | NDCG@3: 0.00
+ [Hybrid]  Retrieved: ['c1_chunk_33', 'c1_chunk_276', 'c1_chunk_273'] | Recall@3: 1.0 | Prec@3: 0.33 | MRR: 1.00 | NDCG@3: 1.00
+
+Q10: 'What is the total estimated outlay for the Department of Health and Human Services in the FY2021 budget request?'
+Target Chunk ID: c10_chunk_18
+ [Hashing] Retrieved: ['c10_chunk_6', 'c10_chunk_0', 'c10_chunk_21'] | Recall@3: 0.0 | Prec@3: 0.00 | MRR: 0.00 | NDCG@3: 0.00
+ [Hybrid]  Retrieved: ['c10_chunk_21', 'c10_chunk_24', 'c10_chunk_84'] | Recall@3: 0.0 | Prec@3: 0.00 | MRR: 0.00 | NDCG@3: 0.00
+
+Q11: 'Why do private sector companies try to avoid building products that break easily?'
+Target Chunk ID: c100_chunk_33
+ [Hashing] Retrieved: ['c100_chunk_45', 'c12_chunk_273', 'c12_chunk_261'] | Recall@3: 0.0 | Prec@3: 0.00 | MRR: 0.00 | NDCG@3: 0.00
+ [Hybrid]  Retrieved: ['c100_chunk_45', 'c138_chunk_282', 'c100_chunk_84'] | Recall@3: 0.0 | Prec@3: 0.00 | MRR: 0.00 | NDCG@3: 0.00
+
+Q12: 'Which two major defense programs failed to include reliability engineers early in their system development?'
+Target Chunk ID: c100_chunk_108
+ [Hashing] Retrieved: ['c100_chunk_111', 'c100_chunk_48', 'c100_chunk_51'] | Recall@3: 0.0 | Prec@3: 0.00 | MRR: 0.00 | NDCG@3: 0.00
+ [Hybrid]  Retrieved: ['c100_chunk_111', 'c100_chunk_108', 'c100_chunk_171'] | Recall@3: 1.0 | Prec@3: 0.33 | MRR: 0.50 | NDCG@3: 0.63
+
+Q13: 'What technical defect forced all F-35s out of the sky in late 2018?'
+Target Chunk ID: c101_chunk_48
+ [Hashing] Retrieved: ['c124_chunk_75', 'c101_chunk_51', 'c126_chunk_279'] | Recall@3: 0.0 | Prec@3: 0.00 | MRR: 0.00 | NDCG@3: 0.00
+ [Hybrid]  Retrieved: ['c101_chunk_51', 'c101_chunk_342', 'c101_chunk_54'] | Recall@3: 0.0 | Prec@3: 0.00 | MRR: 0.00 | NDCG@3: 0.00
+
+Q14: 'What was the projected acquisition cost for the F-35 program mentioned in the report?'
+Target Chunk ID: c101_chunk_9
+ [Hashing] Retrieved: ['c106_chunk_279', 'c101_chunk_129', 'c106_chunk_408'] | Recall@3: 0.0 | Prec@3: 0.00 | MRR: 0.00 | NDCG@3: 0.00
+ [Hybrid]  Retrieved: ['c106_chunk_30', 'c101_chunk_12', 'c106_chunk_36'] | Recall@3: 0.0 | Prec@3: 0.00 | MRR: 0.00 | NDCG@3: 0.00
+
+Q15: 'Did the 1985 review of defense profit guidelines factor in a company's assets and liabilities?'
+Target Chunk ID: c102_chunk_54
+ [Hashing] Retrieved: ['c138_chunk_30', 'c102_chunk_117', 'c102_chunk_57'] | Recall@3: 0.0 | Prec@3: 0.00 | MRR: 0.00 | NDCG@3: 0.00
+ [Hybrid]  Retrieved: ['c102_chunk_57', 'c102_chunk_117', 'c102_chunk_45'] | Recall@3: 0.0 | Prec@3: 0.00 | MRR: 0.00 | NDCG@3: 0.00
+
+Q16: 'What was the authorized end strength for uniformed Army personnel in 2017?'
+Target Chunk ID: c103_chunk_30
+ [Hashing] Retrieved: ['c103_chunk_42', 'c103_chunk_39', 'c103_chunk_33'] | Recall@3: 0.0 | Prec@3: 0.00 | MRR: 0.00 | NDCG@3: 0.00
+ [Hybrid]  Retrieved: ['c103_chunk_33', 'c103_chunk_30', 'c103_chunk_42'] | Recall@3: 1.0 | Prec@3: 0.33 | MRR: 0.50 | NDCG@3: 0.63
+
+Q17: 'What defines a covered defense business system in terms of budget authority?'
+Target Chunk ID: c104_chunk_12
+ [Hashing] Retrieved: ['c104_chunk_12', 'c104_chunk_15', 'c104_chunk_18'] | Recall@3: 1.0 | Prec@3: 0.33 | MRR: 1.00 | NDCG@3: 1.00
+ [Hybrid]  Retrieved: ['c104_chunk_12', 'c104_chunk_15', 'c104_chunk_18'] | Recall@3: 1.0 | Prec@3: 0.33 | MRR: 1.00 | NDCG@3: 1.00
+
+Q18: 'When did the TSA Pipeline Security Branch issue its revised security guidelines?'
+Target Chunk ID: c11_chunk_12
+ [Hashing] Retrieved: ['c11_chunk_0', 'c11_chunk_42', 'c11_chunk_30'] | Recall@3: 0.0 | Prec@3: 0.00 | MRR: 0.00 | NDCG@3: 0.00
+ [Hybrid]  Retrieved: ['c11_chunk_12', 'c11_chunk_15', 'c11_chunk_18'] | Recall@3: 1.0 | Prec@3: 0.33 | MRR: 1.00 | NDCG@3: 1.00
+
+Q19: 'What act established requirements for legislation that imposes duties on state or local governments without funding?'
+Target Chunk ID: c12_chunk_0
+ [Hashing] Retrieved: ['c12_chunk_429', 'c12_chunk_9', 'c12_chunk_432'] | Recall@3: 0.0 | Prec@3: 0.00 | MRR: 0.00 | NDCG@3: 0.00
+ [Hybrid]  Retrieved: ['c12_chunk_0', 'c12_chunk_432', 'c12_chunk_429'] | Recall@3: 1.0 | Prec@3: 0.33 | MRR: 1.00 | NDCG@3: 1.00
+
+Q20: 'What monetary limit dictates whether a military enterprise software project is heavily regulated?'
+Target Chunk ID: c104_chunk_12
+ [Hashing] Retrieved: ['c108_chunk_357', 'c112_chunk_141', 'c137_chunk_255'] | Recall@3: 0.0 | Prec@3: 0.00 | MRR: 0.00 | NDCG@3: 0.00
+ [Hybrid]  Retrieved: ['c117_chunk_258', 'c117_chunk_261', 'c109_chunk_159'] | Recall@3: 0.0 | Prec@3: 0.00 | MRR: 0.00 | NDCG@3: 0.00
+
+===============================================================================================
+🏆 BENCHMARK RESULTS 🏆
+===============================================================================================
+Total Queries: 20
+Hashing    | Recall@3 (Hit Rate):  10.0% | Precision@3: 0.033 | Avg MRR: 0.100 | Avg NDCG@3: 0.100
+Hybrid     | Recall@3 (Hit Rate):  50.0% | Precision@3: 0.167 | Avg MRR: 0.375 | Avg NDCG@3: 0.408
+===============================================================================================
