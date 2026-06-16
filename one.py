@@ -1,6 +1,5 @@
 import json
 import numpy as np
-import time
 from typing import List, Dict, Tuple
 from sklearn.feature_extraction.text import HashingVectorizer
 from sklearn.metrics.pairwise import cosine_distances
@@ -198,13 +197,29 @@ class HybridRetriever:
         return final_chunk_ids
 
 # --- 5. EVALUATION HARNESS ---
-def calculate_metrics(retrieved_ids: List[str], expected_id: str) -> Tuple[int, float]:
-    hit = 1 if expected_id in retrieved_ids else 0
+def calculate_metrics(retrieved_ids: List[str], expected_id: str, k: int = 3) -> Dict[str, float]:
+    # Ensure we only evaluate the top k results
+    retrieved_ids = retrieved_ids[:k]
+    
+    # Recall@K (Equivalent to Hit Rate when there is exactly 1 relevant document)
+    recall = 1.0 if expected_id in retrieved_ids else 0.0
+    
+    # Precision@K (Relevant docs retrieved / Total docs retrieved)
+    precision = 1.0 / len(retrieved_ids) if (expected_id in retrieved_ids and len(retrieved_ids) > 0) else 0.0
+    
     mrr = 0.0
+    ndcg = 0.0
+    
     if expected_id in retrieved_ids:
         rank = retrieved_ids.index(expected_id) + 1
         mrr = 1.0 / rank
-    return hit, mrr
+        
+        # NDCG@K: DCG / IDCG
+        # Since there is only 1 relevant document, Ideal DCG is when it's at rank 1: 1 / log2(1+1) = 1.0
+        # So NDCG is simply the DCG of the found rank.
+        ndcg = 1.0 / np.log2(rank + 1)
+        
+    return {"recall": recall, "precision": precision, "mrr": mrr, "ndcg": ndcg}
 
 def run_benchmark():
     chunks = load_and_chunk_corpus()
@@ -234,7 +249,10 @@ def run_benchmark():
     hashing_retriever = HashingVectorizerRetriever(chunks)
     hybrid_retriever = HybridRetriever(chunks)
     
-    results = {"Hashing": {"hits": 0, "mrr": 0.0, "time": 0.0}, "Hybrid": {"hits": 0, "mrr": 0.0, "time": 0.0}}
+    results = {
+        "Hashing": {"recall": 0.0, "precision": 0.0, "mrr": 0.0, "ndcg": 0.0}, 
+        "Hybrid": {"recall": 0.0, "precision": 0.0, "mrr": 0.0, "ndcg": 0.0}
+    }
     total_queries = len(eval_dataset)
     
     print("\n--- Running Evaluation ---")
@@ -245,37 +263,36 @@ def run_benchmark():
         print(f"Target Chunk ID: {expected}")
         
         # Test Hashing
-        start_time = time.time()
         hash_results = hashing_retriever.search(query, top_k=3)
-        h_time = time.time() - start_time
         
-        h_hit, h_mrr = calculate_metrics(hash_results, expected)
-        results["Hashing"]["hits"] += h_hit
-        results["Hashing"]["mrr"] += h_mrr
-        results["Hashing"]["time"] += h_time
-        print(f" [Hashing] Retrieved: {hash_results} | Hit: {h_hit} | MRR: {h_mrr:.2f} | Time: {h_time:.4f}s")
+        h_metrics = calculate_metrics(hash_results, expected, k=3)
+        results["Hashing"]["recall"] += h_metrics["recall"]
+        results["Hashing"]["precision"] += h_metrics["precision"]
+        results["Hashing"]["mrr"] += h_metrics["mrr"]
+        results["Hashing"]["ndcg"] += h_metrics["ndcg"]
+        print(f" [Hashing] Retrieved: {hash_results} | Recall@3: {h_metrics['recall']} | Prec@3: {h_metrics['precision']:.2f} | MRR: {h_metrics['mrr']:.2f} | NDCG@3: {h_metrics['ndcg']:.2f}")
         
         # Test Hybrid
-        start_time = time.time()
         hybrid_results = hybrid_retriever.search(query, top_k=3)
-        hy_time = time.time() - start_time
         
-        hy_hit, hy_mrr = calculate_metrics(hybrid_results, expected)
-        results["Hybrid"]["hits"] += hy_hit
-        results["Hybrid"]["mrr"] += hy_mrr
-        results["Hybrid"]["time"] += hy_time
-        print(f" [Hybrid]  Retrieved: {hybrid_results} | Hit: {hy_hit} | MRR: {hy_mrr:.2f} | Time: {hy_time:.4f}s")
+        hy_metrics = calculate_metrics(hybrid_results, expected, k=3)
+        results["Hybrid"]["recall"] += hy_metrics["recall"]
+        results["Hybrid"]["precision"] += hy_metrics["precision"]
+        results["Hybrid"]["mrr"] += hy_metrics["mrr"]
+        results["Hybrid"]["ndcg"] += hy_metrics["ndcg"]
+        print(f" [Hybrid]  Retrieved: {hybrid_results} | Recall@3: {hy_metrics['recall']} | Prec@3: {hy_metrics['precision']:.2f} | MRR: {hy_metrics['mrr']:.2f} | NDCG@3: {hy_metrics['ndcg']:.2f}")
 
-    print("\n" + "="*55)
+    print("\n" + "="*95)
     print("🏆 BENCHMARK RESULTS 🏆")
-    print("="*55)
+    print("="*95)
     print(f"Total Queries: {total_queries}")
     for name, metrics in results.items():
-        hit_rate = (metrics['hits'] / total_queries) * 100
+        avg_recall = (metrics['recall'] / total_queries) * 100
+        avg_prec = metrics['precision'] / total_queries
         avg_mrr = metrics['mrr'] / total_queries
-        avg_time = metrics['time'] / total_queries
-        print(f"{name:10} | Hit Rate @ 3: {hit_rate:5.1f}% | Avg MRR: {avg_mrr:.3f} | Avg Latency: {avg_time:.4f}s")
-    print("="*55)
+        avg_ndcg = metrics['ndcg'] / total_queries
+        print(f"{name:10} | Recall@3 (Hit Rate): {avg_recall:5.1f}% | Precision@3: {avg_prec:.3f} | Avg MRR: {avg_mrr:.3f} | Avg NDCG@3: {avg_ndcg:.3f}")
+    print("="*95)
 
 if __name__ == "__main__":
     run_benchmark()
