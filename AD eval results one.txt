@@ -1,0 +1,117 @@
+root@a4095273b3d8:/home/benchmarking# python one.py 
+Loaded 4922 chunks from small_corpus.jsonl
+
+--- Mapping Golden Dataset to Dynamic Chunk IDs ---
+Successfully mapped 20 queries.
+
+--- Initializing Retrievers ---
+Loading local embedding model (all-MiniLM-L6-v2)...
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 103/103 [00:00<00:00, 1142.89it/s]
+Loading sparse index (BM25)...
+Loading Reranker (ms-marco-MiniLM-L-6-v2)...
+Loading weights: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 105/105 [00:00<00:00, 1160.50it/s]
+
+--- Running Evaluation with Latency/Memory Profiling ---
+
+Q1: 'Which standing order created the privileged nominations designation?'
+ [Hashing] Recall: 1.0 | Prec: 0.33 | MRR: 0.33 | NDCG: 0.50 | Time: 6.6ms | Mem: 7.454MB
+ [Hybrid]  Recall: 1.0 | Prec: 0.33 | MRR: 1.00 | NDCG: 1.00 | Time: 442.3ms | Mem: 0.311MB
+
+Q2: 'How many privileged positions exist?'
+ [Hashing] Recall: 0.0 | Prec: 0.00 | MRR: 0.00 | NDCG: 0.00 | Time: 5.4ms | Mem: 7.446MB
+ [Hybrid]  Recall: 0.0 | Prec: 0.00 | MRR: 0.00 | NDCG: 0.00 | Time: 307.7ms | Mem: 0.277MB
+
+Q3: 'What is the retention issue at the Social Security Administration for non-disabled hires?'
+ [Hashing] Recall: 0.0 | Prec: 0.00 | MRR: 0.00 | NDCG: 0.00 | Time: 6.1ms | Mem: 7.447MB
+ [Hybrid]  Recall: 1.0 | Prec: 0.33 | MRR: 0.50 | NDCG: 0.63 | Time: 341.5ms | Mem: 0.278MB
+
+Q4: 'What fraction of non-handicapped employees left the agency within 12 months?'
+ [Hashing] Recall: 0.0 | Prec: 0.00 | MRR: 0.00 | NDCG: 0.00 | Time: 7.0ms | Mem: 7.446MB
+ [Hybrid]  Recall: 0.0 | Prec: 0.00 | MRR: 0.00 | NDCG: 0.00 | Time: 439.1ms | Mem: 0.322MB
+
+Q5: 'Are most of the expedited senate selections for full-time roles?'
+ [Hashing] Recall: 1.0 | Prec: 0.33 | MRR: 0.33 | NDCG: 0.50 | Time: 6.4ms | Mem: 7.446MB
+ [Hybrid]  Recall: 0.0 | Prec: 0.00 | MRR: 0.00 | NDCG: 0.00 | Time: 396.5ms | Mem: 0.294MB
+
+Q6: 'Which rule was introduced to make confirming presidential appointees faster?'
+ [Hashing] Recall: 0.0 | Prec: 0.00 | MRR: 0.00 | NDCG: 0.00 | Time: 8.7ms | Mem: 7.446MB
+ [Hybrid]  Recall: 0.0 | Prec: 0.00 | MRR: 0.00 | NDCG: 0.00 | Time: 402.3ms | Mem: 0.292MB
+
+Q7: 'Were the roles initially expedited by the 112th Congress later expanded to include any insurance-related boards?'
+ [Hashing] Recall: 0.0 | Prec: 0.00 | MRR: 0.00 | NDCG: 0.00 | Time: 7.6ms | Mem: 7.446MB
+ [Hybrid]  Recall: 1.0 | Prec: 0.33 | MRR: 0.50 | NDCG: 0.63 | Time: 633.5ms | Mem: 0.366MB
+
+Q8: 'How did the Washington Post obtain the Afghanistan Papers interviews?'
+ [Hashing] Recall: 0.0 | Prec: 0.00 | MRR: 0.00 | NDCG: 0.00 | Time: 6.9ms | Mem: 7.446MB
+ [Hybrid]  Recall: 0.0 | Prec: 0.00 | MRR: 0.00 | NDCG: 0.00 | Time: 571.3ms | Mem: 0.351MB
+
+Q9: 'What did Ashraf Ghani say about the financial limit Afghanistan could handle in 2002?'
+ [Hashing] Recall: 0.0 | Prec: 0.00 | MRR: 0.00 | NDCG: 0.00 | Time: 27.7ms | Mem: 7.446MB
+ [Hybrid]  Recall: 1.0 | Prec: 0.33 | MRR: 1.00 | NDCG: 1.00 | Time: 442.8ms | Mem: 0.309MB
+
+Q10: 'What is the total estimated outlay for the Department of Health and Human Services in the FY2021 budget request?'
+ [Hashing] Recall: 0.0 | Prec: 0.00 | MRR: 0.00 | NDCG: 0.00 | Time: 7.1ms | Mem: 7.446MB
+ [Hybrid]  Recall: 0.0 | Prec: 0.00 | MRR: 0.00 | NDCG: 0.00 | Time: 756.5ms | Mem: 0.411MB
+
+Q11: 'Why do private sector companies try to avoid building products that break easily?'
+ [Hashing] Recall: 0.0 | Prec: 0.00 | MRR: 0.00 | NDCG: 0.00 | Time: 5.5ms | Mem: 7.446MB
+ [Hybrid]  Recall: 0.0 | Prec: 0.00 | MRR: 0.00 | NDCG: 0.00 | Time: 402.9ms | Mem: 0.300MB
+
+Q12: 'Which two major defense programs failed to include reliability engineers early in their system development?'
+ [Hashing] Recall: 0.0 | Prec: 0.00 | MRR: 0.00 | NDCG: 0.00 | Time: 6.9ms | Mem: 7.446MB
+ [Hybrid]  Recall: 1.0 | Prec: 0.33 | MRR: 0.50 | NDCG: 0.63 | Time: 323.7ms | Mem: 0.278MB
+
+Q13: 'What technical defect forced all F-35s out of the sky in late 2018?'
+ [Hashing] Recall: 0.0 | Prec: 0.00 | MRR: 0.00 | NDCG: 0.00 | Time: 7.0ms | Mem: 7.446MB
+ [Hybrid]  Recall: 1.0 | Prec: 0.33 | MRR: 0.50 | NDCG: 0.63 | Time: 589.4ms | Mem: 0.370MB
+
+Q14: 'What was the projected acquisition cost for the F-35 program mentioned in the report?'
+ [Hashing] Recall: 0.0 | Prec: 0.00 | MRR: 0.00 | NDCG: 0.00 | Time: 29.3ms | Mem: 7.446MB
+ [Hybrid]  Recall: 0.0 | Prec: 0.00 | MRR: 0.00 | NDCG: 0.00 | Time: 465.7ms | Mem: 0.323MB
+
+Q15: 'Did the 1985 review of defense profit guidelines factor in a company's assets and liabilities?'
+ [Hashing] Recall: 0.0 | Prec: 0.00 | MRR: 0.00 | NDCG: 0.00 | Time: 7.6ms | Mem: 7.446MB
+ [Hybrid]  Recall: 0.0 | Prec: 0.00 | MRR: 0.00 | NDCG: 0.00 | Time: 348.6ms | Mem: 0.278MB
+
+Q16: 'What was the authorized end strength for uniformed Army personnel in 2017?'
+ [Hashing] Recall: 0.0 | Prec: 0.00 | MRR: 0.00 | NDCG: 0.00 | Time: 7.4ms | Mem: 7.446MB
+ [Hybrid]  Recall: 1.0 | Prec: 0.33 | MRR: 0.50 | NDCG: 0.63 | Time: 333.2ms | Mem: 0.277MB
+
+Q17: 'What defines a covered defense business system in terms of budget authority?'
+ [Hashing] Recall: 1.0 | Prec: 0.33 | MRR: 1.00 | NDCG: 1.00 | Time: 8.0ms | Mem: 7.446MB
+ [Hybrid]  Recall: 1.0 | Prec: 0.33 | MRR: 1.00 | NDCG: 1.00 | Time: 343.9ms | Mem: 0.277MB
+
+Q18: 'When did the TSA Pipeline Security Branch issue its revised security guidelines?'
+ [Hashing] Recall: 1.0 | Prec: 0.33 | MRR: 0.50 | NDCG: 0.63 | Time: 6.6ms | Mem: 7.446MB
+ [Hybrid]  Recall: 1.0 | Prec: 0.33 | MRR: 1.00 | NDCG: 1.00 | Time: 570.5ms | Mem: 0.354MB
+
+Q19: 'What act established requirements for legislation that imposes duties on state or local governments without funding?'
+ [Hashing] Recall: 0.0 | Prec: 0.00 | MRR: 0.00 | NDCG: 0.00 | Time: 5.4ms | Mem: 7.446MB
+ [Hybrid]  Recall: 1.0 | Prec: 0.33 | MRR: 1.00 | NDCG: 1.00 | Time: 709.9ms | Mem: 0.419MB
+
+Q20: 'What monetary limit dictates whether a military enterprise software project is heavily regulated?'
+ [Hashing] Recall: 0.0 | Prec: 0.00 | MRR: 0.00 | NDCG: 0.00 | Time: 23.8ms | Mem: 7.446MB
+ [Hybrid]  Recall: 0.0 | Prec: 0.00 | MRR: 0.00 | NDCG: 0.00 | Time: 744.8ms | Mem: 0.397MB
+
+================================================================================
+🏆 FINAL AD-ADOPTION BENCHMARK RESULTS 🏆
+================================================================================
+Total Queries Evaluated: 20
+
+Hashing Retriever:
+  -> Recall@3 (Hit Rate):  20.0%
+  -> Precision@3:         0.067
+  -> Avg MRR:             0.108
+  -> Avg NDCG@3:          0.132
+  -> Avg Latency/Query:   9.86 ms
+  -> Avg Memory Spike:    7.447 MB
+
+Hybrid Retriever:
+  -> Recall@3 (Hit Rate):  50.0%
+  -> Precision@3:         0.167
+  -> Avg MRR:             0.375
+  -> Avg NDCG@3:          0.408
+  -> Avg Latency/Query:   478.30 ms
+  -> Avg Memory Spike:    0.324 MB
+================================================================================
